@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "405448121881",
+    "project_id": "mytenera",
+    "storage_bucket": "mytenera.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:405448121881:android:b8e3900e515e7fca789488",
+        "android_client_info": {
+          "package_name": "me.shyam16102001.mytenera"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "405448121881-pdiotpj7d9sp9u9i3ma8qld4i44s35e4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "me.shyam16102001.mytenera",
+            "certificate_hash": "4970b72740e121806f4e2200d818dced635fc619"
+          }
+        },
+        {
+          "client_id": "405448121881-sts8eca56urpc5p102ejj1n247em88hg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6JB8JAH75b0MIBwjY0RlNCjoWD2rzO3o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "405448121881-sts8eca56urpc5p102ejj1n247em88hg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
