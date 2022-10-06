@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:mytenera/config/constants.dart';
-import 'package:mytenera/screen/aution_page/aution_page.dart';
+import 'package:mytenera/screen/auction_page/auction_page.dart';
 import 'package:mytenera/screen/home_page/home_page.dart';
 import 'package:mytenera/screen/profile_page/profile_page.dart';
 
@@ -19,8 +19,8 @@ class _NavigationState extends State<Navigation> {
 
   List<Widget> body = [
     const HomePage(),
-    const AutoionPage(),
-    ProfilePage(),
+    const AuctionPage(),
+    const ProfilePage(),
   ];
 
   @override
