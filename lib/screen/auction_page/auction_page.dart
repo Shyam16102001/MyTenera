@@ -141,6 +141,8 @@ class _AuctionPageState extends State<AuctionPage> {
               ),
               Text(
                 postedBy,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
                 style: Theme.of(context).textTheme.titleSmall,
               ),
               Container(
