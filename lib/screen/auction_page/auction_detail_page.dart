@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mytenera/components/button.dart';
 import 'package:mytenera/config/constants.dart';
+import 'package:mytenera/config/size_config.dart';
 import 'package:mytenera/data_service/file_download.dart';
 
 class AuctionDetailPage extends StatefulWidget {
@@ -78,11 +79,12 @@ class _AuctionDetailPageState extends State<AuctionDetailPage> {
                 children: [
                   Image.network(
                     widget.urlImage,
-                    height: 350,
+                    height: getProportionateScreenHeight(350),
                     fit: BoxFit.cover,
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: getProportionateScreenHeight(12)),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -98,8 +100,9 @@ class _AuctionDetailPageState extends State<AuctionDetailPage> {
                     ),
                   ),
                   Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 3),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: getProportionateScreenHeight(12),
+                        vertical: getProportionateScreenWidth(3)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -121,7 +124,7 @@ class _AuctionDetailPageState extends State<AuctionDetailPage> {
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
                   SizedBox(
-                      height: 80,
+                      height: getProportionateScreenHeight(90),
                       child: ListView(
                         padding: const EdgeInsets.all(8),
                         children: <Widget>[
@@ -158,17 +161,13 @@ class _AuctionDetailPageState extends State<AuctionDetailPage> {
                       InkWell(
                           borderRadius: BorderRadius.circular(20),
                           splashColor: kPrimaryLightColor,
-                          // onTap: () {
-                          //   showBanner("error");
-                          // },
-
                           onTap: () async {
                             final value = await popUpDialog(context);
 
                             if (value == null || value.isEmpty) return;
                             try {
                               amount = double.parse(value);
-                              print("sdfsf $amount");
+
                               if (amount < widget.startingPrice) {
                                 showBanner(
                                     "Enter the amount greater than the starting price");
@@ -181,7 +180,7 @@ class _AuctionDetailPageState extends State<AuctionDetailPage> {
                               context, 'Place a bid', Icons.gavel, true)),
                     ],
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: getProportionateScreenHeight(50)),
                 ],
               ),
             ),
@@ -200,9 +199,9 @@ class _AuctionDetailPageState extends State<AuctionDetailPage> {
                   style: Theme.of(context)
                       .textTheme
                       .titleLarge!
-                      .merge(TextStyle(color: kBackgroundColor)),
+                      .merge(const TextStyle(color: kBackgroundColor)),
                 ),
-                Spacer(),
+                const Spacer(),
                 Text(
                   error,
                   maxLines: 1,
@@ -211,7 +210,7 @@ class _AuctionDetailPageState extends State<AuctionDetailPage> {
               ],
             )),
         behavior: SnackBarBehavior.floating,
-        backgroundColor: Color(0xFFC72C41),
+        backgroundColor: const Color(0xFFC72C41),
         elevation: 0,
       ));
 

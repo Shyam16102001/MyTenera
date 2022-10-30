@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mytenera/components/authentication.dart';
 import 'package:mytenera/components/navigation.dart';
 import 'package:mytenera/config/constants.dart';
+import 'package:mytenera/config/size_config.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -16,13 +17,15 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
+
     return Scaffold(
         appBar: AppBar(
           backgroundColor: kBackgroundColor,
           elevation: 0,
         ),
         body: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(getProportionateScreenHeight(10)),
           child: Column(
             children: [
               Center(
@@ -39,13 +42,13 @@ class LoginPage extends StatelessWidget {
                   ],
                 ),
               ),
-              SvgPicture.asset("assets/icons/logo.svg"),
+              SvgPicture.asset("assets/images/splashScreen.svg"),
               const Spacer(),
               Padding(
-                padding: const EdgeInsets.all(15.0),
+                padding: EdgeInsets.all(getProportionateScreenHeight(15)),
                 child: SizedBox(
                   width: double.infinity,
-                  height: 56,
+                  height: getProportionateScreenHeight(60),
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black54,
@@ -69,9 +72,9 @@ class LoginPage extends StatelessWidget {
                         children: [
                           SvgPicture.asset(
                             "assets/icons/google.svg",
-                            height: 35,
+                            height: getProportionateScreenHeight(35),
                           ),
-                          const SizedBox(width: 10),
+                          SizedBox(width: getProportionateScreenWidth(10)),
                           Text("Sign In With Google",
                               style: Theme.of(context)
                                   .textTheme
@@ -81,7 +84,7 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 50),
+              SizedBox(height: getProportionateScreenHeight(50)),
             ],
           ),
         ));

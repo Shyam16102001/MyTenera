@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mytenera/config/constants.dart';
+import 'package:mytenera/config/size_config.dart';
 import 'package:mytenera/screen/auction_page/auction_detail_page.dart';
 
 Widget buildImage(
@@ -32,11 +33,15 @@ Widget buildImage(
     borderRadius: BorderRadius.circular(25),
     splashColor: kSecondaryColor,
     child: Container(
-      height: 400,
-      width: 300,
-      margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+      height: getProportionateScreenHeight(400),
+      width: getProportionateScreenWidth(300),
+      margin: EdgeInsets.symmetric(
+          vertical: getProportionateScreenWidth(15),
+          horizontal: getProportionateScreenHeight(10)),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        padding: EdgeInsets.symmetric(
+            horizontal: getProportionateScreenHeight(15),
+            vertical: getProportionateScreenWidth(14)),
         decoration: BoxDecoration(
             color: kBackgroundColor,
             borderRadius: BorderRadius.circular(25),
@@ -57,7 +62,7 @@ Widget buildImage(
           children: [
             Image.network(
               urlImage,
-              height: 250,
+              height: getProportionateScreenHeight(250),
               fit: BoxFit.cover,
             ),
             const SizedBox(height: 10),

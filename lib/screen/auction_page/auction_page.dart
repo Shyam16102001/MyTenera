@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mytenera/config/constants.dart';
+import 'package:mytenera/config/size_config.dart';
 import 'package:mytenera/data_service/database_manager.dart';
 import 'package:mytenera/screen/auction_page/auction_detail_page.dart';
 
@@ -38,7 +39,9 @@ class _AuctionPageState extends State<AuctionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      padding: EdgeInsets.symmetric(
+          horizontal: getProportionateScreenHeight(12),
+          vertical: getProportionateScreenWidth(12)),
       child: autionList.isEmpty
           ? const Center(child: CircularProgressIndicator())
           : RefreshIndicator(
@@ -130,8 +133,8 @@ class _AuctionPageState extends State<AuctionPage> {
                 padding: const EdgeInsets.all(4.0),
                 child: Image.network(
                   urlImage,
-                  width: 175,
-                  height: 100,
+                  width: getProportionateScreenWidth(175),
+                  height: getProportionateScreenHeight(100),
                   fit: BoxFit.cover,
                 ),
               ),

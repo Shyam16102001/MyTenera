@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mytenera/components/neumorphism_button.dart';
 import 'package:mytenera/config/constants.dart';
+import 'package:mytenera/config/size_config.dart';
 
 class AddAuction extends StatefulWidget {
   const AddAuction({super.key});
@@ -14,7 +15,7 @@ class AddAuction extends StatefulWidget {
 }
 
 class _AddAuctionState extends State<AddAuction> {
-  final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   late String name;
   DateTime endDate = DateTime.now();
   TimeOfDay endTime = TimeOfDay.now();
@@ -32,58 +33,59 @@ class _AddAuctionState extends State<AddAuction> {
         ),
         body: SingleChildScrollView(
           child: Form(
-              key: _formKey,
+              key: formKey,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(
+                    horizontal: getProportionateScreenHeight(20)),
                 child: Column(
                   children: [
-                    const SizedBox(height: 20),
+                    SizedBox(height: getProportionateScreenHeight(20)),
                     nameFormField(),
-                    const SizedBox(height: 20),
+                    SizedBox(height: getProportionateScreenHeight(20)),
                     dateTimeSelector(),
-                    const SizedBox(height: 20),
+                    SizedBox(height: getProportionateScreenHeight(20)),
                     priceFormField(),
-                    const SizedBox(height: 20),
+                    SizedBox(height: getProportionateScreenHeight(20)),
                     photoFormField(),
-                    const SizedBox(height: 20),
+                    SizedBox(height: getProportionateScreenHeight(20)),
                     documentFormField(),
-                    const SizedBox(height: 20),
+                    SizedBox(height: getProportionateScreenHeight(20)),
                     descriptionFormField(),
-                    const SizedBox(height: 20),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          isLoading = !isLoading;
-                        });
-                        if (_formKey.currentState!.validate()) {
-                          FirebaseFirestore.instance
-                              .collection("Auction")
-                              .doc()
-                              .set({
-                            "Name": name.toString(),
-                            "EndDate":
-                                DateFormat.yMMMd().format(endDate).toString(),
-                            "EndTime": endTime.format(context).toString(),
-                            "StartingPrice": price,
-                            "Photo": photo.toString(),
-                            "Document": document.toString(),
-                            "Description": description,
-                            "PostedBy":
-                                FirebaseAuth.instance.currentUser!.email,
-                            "DisplayName":
-                                FirebaseAuth.instance.currentUser!.displayName
-                          }).then((value) => Navigator.pop(context));
-                        } else {
-                          setState(() {
-                            isLoading = false;
-                          });
-                        }
-                      },
-                      child: isLoading
-                          ? loading(context)
-                          : neumorphismButton(context,
-                              Icons.check_circle_outline_rounded, "Submit"),
-                    )
+                    SizedBox(height: getProportionateScreenHeight(20)),
+                    isLoading
+                        ? loading(context)
+                        : NeumorphismButton(
+                            text: "Submit",
+                            icon: Icons.check_circle_outline_rounded,
+                            press: () {
+                              setState(() {
+                                isLoading = !isLoading;
+                              });
+                              if (formKey.currentState!.validate()) {
+                                FirebaseFirestore.instance
+                                    .collection("Auction")
+                                    .doc()
+                                    .set({
+                                  "Name": name.toString(),
+                                  "EndDate": DateFormat.yMMMd()
+                                      .format(endDate)
+                                      .toString(),
+                                  "EndTime": endTime.format(context).toString(),
+                                  "StartingPrice": price,
+                                  "Photo": photo.toString(),
+                                  "Document": document.toString(),
+                                  "Description": description,
+                                  "PostedBy":
+                                      FirebaseAuth.instance.currentUser!.email,
+                                  "DisplayName": FirebaseAuth
+                                      .instance.currentUser!.displayName
+                                }).then((value) => Navigator.pop(context));
+                              } else {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                              }
+                            })
                   ],
                 ),
               )),
@@ -92,7 +94,7 @@ class _AddAuctionState extends State<AddAuction> {
 
   Container loading(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.all(15),
+        padding: EdgeInsets.all(getProportionateScreenWidth(15)),
         decoration: BoxDecoration(
             color: kBackgroundColor,
             borderRadius: BorderRadius.circular(25),

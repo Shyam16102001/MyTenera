@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mytenera/components/build_image.dart';
 import 'package:mytenera/components/neumorphism_button.dart';
+import 'package:mytenera/config/size_config.dart';
 import 'package:mytenera/data_service/database_manager.dart';
 import 'package:mytenera/screen/add_auction_page/add_auction.dart';
 
@@ -41,13 +42,14 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(
+              horizontal: getProportionateScreenHeight(16)),
           child: Column(
             children: [
               autionList.isEmpty
                   ? Column(
-                      children: const [
-                        SizedBox(height: 200),
+                      children: [
+                        SizedBox(height: getProportionateScreenHeight(200)),
                         CircularProgressIndicator(),
                       ],
                     )
@@ -92,20 +94,19 @@ class _HomePageState extends State<HomePage> {
                                   startingPrice);
                             },
                             options: CarouselOptions(
-                              height: 400,
+                              height: getProportionateScreenHeight(400),
                               viewportFraction: .85,
                               autoPlay: true,
                             )),
                       ],
                     ),
               const Spacer(),
-              GestureDetector(
-                onTap: () =>
-                    Navigator.of(context).pushNamed(AddAuction.routeName),
-                child: neumorphismButton(
-                    context, Icons.add_circle_outline, "Post an Auction"),
-              ),
-              const SizedBox(height: 50),
+              NeumorphismButton(
+                  text: "Post an Auction",
+                  icon: Icons.add_circle_outline,
+                  press: () =>
+                      Navigator.of(context).pushNamed(AddAuction.routeName)),
+              SizedBox(height: getProportionateScreenHeight(50)),
             ],
           )),
     );
