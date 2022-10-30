@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'MYTENERA',
+      title: 'MyTenera',
       debugShowCheckedModeBanner: false,
       theme: theme(),
       initialRoute: FirebaseAuth.instance.currentUser == null

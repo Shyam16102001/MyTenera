@@ -13,7 +13,26 @@ class DataBaseManager {
           itemsList[i]['ID'] = querySnapshot.docs[i].id;
         }
       });
+      return itemsList;
+    } catch (e) {
+      return null;
+    }
+  }
 
+  Future getBiddingList(String id) async {
+    List itemsList = [];
+    try {
+      await FirebaseFirestore.instance
+          .collection("Auction")
+          .doc(id)
+          .collection("Bidding")
+          .get()
+          .then((querySnapshot) {
+        for (var i = 0; i < querySnapshot.docs.length; i++) {
+          itemsList.add(querySnapshot.docs[i].data());
+          itemsList[i]['ID'] = querySnapshot.docs[i].id;
+        }
+      });
       return itemsList;
     } catch (e) {
       return null;

@@ -13,22 +13,25 @@ Widget buildImage(
     String postedBy,
     String urlImage,
     String urlDocument,
-    String startingPrice) {
+    String startingPrice,
+    bool self) {
   return InkWell(
     onTap: () {
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => AuctionDetailPage(
-                  id: id,
-                  name: name,
-                  description: description,
-                  endDate: endDate,
-                  endTime: endTime,
-                  postedBy: postedBy,
-                  urlImage: urlImage,
-                  startingPrice: int.parse(startingPrice),
-                  urlDocument: urlDocument)));
+                    id: id,
+                    name: name,
+                    description: description,
+                    endDate: endDate,
+                    endTime: endTime,
+                    postedBy: postedBy,
+                    urlImage: urlImage,
+                    startingPrice: int.parse(startingPrice),
+                    urlDocument: urlDocument,
+                    self: self,
+                  )));
     },
     borderRadius: BorderRadius.circular(25),
     splashColor: kSecondaryColor,

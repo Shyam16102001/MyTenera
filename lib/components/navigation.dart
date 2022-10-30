@@ -20,7 +20,7 @@ class _NavigationState extends State<Navigation> {
 
   List<Widget> body = [
     const HomePage(),
-    const AuctionPage(),
+    const AuctionPage(self: false),
     const ProfilePage(),
   ];
 

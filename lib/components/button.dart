@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mytenera/config/constants.dart';
+import 'package:mytenera/config/size_config.dart';
 
-Widget button(BuildContext context, String text, IconData icon, bool dark) {
+Widget button(
+    BuildContext context, String text, IconData icon, bool dark, double width) {
   return Ink(
     padding: const EdgeInsets.all(10),
-    width: 175,
+    width: getProportionateScreenWidth(width),
     decoration: BoxDecoration(
       color: dark ? kPrimaryColor : kBackgroundColor,
       borderRadius: BorderRadius.circular(25),

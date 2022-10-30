@@ -227,6 +227,9 @@ class _AddAuctionState extends State<AddAuction> {
         if (price == null || price.isEmpty) {
           return "Please enter the Starting Price";
         }
+        if (double.parse(price) > 100000000) {
+          return "The entered amount is too large";
+        }
         return null;
       },
       style: Theme.of(context).textTheme.titleLarge,

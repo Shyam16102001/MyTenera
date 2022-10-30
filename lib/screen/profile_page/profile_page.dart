@@ -45,7 +45,11 @@ class ProfilePage extends StatelessWidget {
               NeumorphismButton(
                   text: "Auction History",
                   icon: Icons.account_circle,
-                  press: () {}),
+                  press: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const AuctionPage(self: true)))),
               SizedBox(height: getProportionateScreenHeight(25)),
               NeumorphismButton(
                   text: "Help & Support",
@@ -115,7 +119,7 @@ class ProfilePage extends StatelessWidget {
           height: 30,
         ),
         // applicationName: "MyTenera",
-        applicationVersion: "2.3.0",
+        applicationVersion: "2.0.0",
         applicationLegalese:
             "An application to make the tender process easy and transparent.");
   }

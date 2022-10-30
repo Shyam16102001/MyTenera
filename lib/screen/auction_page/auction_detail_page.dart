@@ -1,22 +1,26 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mytenera/components/button.dart';
 import 'package:mytenera/config/constants.dart';
 import 'package:mytenera/config/size_config.dart';
+import 'package:mytenera/data_service/database_manager.dart';
 import 'package:mytenera/data_service/file_download.dart';
 
 class AuctionDetailPage extends StatefulWidget {
-  AuctionDetailPage({
-    Key? key,
-    required this.id,
-    required this.name,
-    required this.description,
-    required this.endDate,
-    required this.endTime,
-    required this.postedBy,
-    required this.urlImage,
-    required this.startingPrice,
-    required this.urlDocument,
-  }) : super(key: key);
+  AuctionDetailPage(
+      {Key? key,
+      required this.id,
+      required this.name,
+      required this.description,
+      required this.endDate,
+      required this.endTime,
+      required this.postedBy,
+      required this.urlImage,
+      required this.startingPrice,
+      required this.urlDocument,
+      required this.self})
+      : super(key: key);
 
   static String routeName = "/auction_details";
   String id;
@@ -28,6 +32,7 @@ class AuctionDetailPage extends StatefulWidget {
   String urlImage;
   int startingPrice;
   String urlDocument;
+  bool self;
 
   @override
   State<AuctionDetailPage> createState() => _AuctionDetailPageState();
@@ -36,10 +41,12 @@ class AuctionDetailPage extends StatefulWidget {
 class _AuctionDetailPageState extends State<AuctionDetailPage> {
   late TextEditingController controller;
   late double amount;
+  List bidList = [];
 
   @override
   void initState() {
     controller = TextEditingController();
+    fetchBiddingList();
     super.initState();
   }
 
@@ -47,6 +54,16 @@ class _AuctionDetailPageState extends State<AuctionDetailPage> {
   void dispose() {
     controller.dispose();
     super.dispose();
+  }
+
+  fetchBiddingList() async {
+    var result = await DataBaseManager().getBiddingList(widget.id);
+    if (result == null) {
+    } else {
+      setState(() {
+        bidList = result;
+      });
+    }
   }
 
   @override
@@ -73,7 +90,8 @@ class _AuctionDetailPageState extends State<AuctionDetailPage> {
           ),
           body: SingleChildScrollView(
             child: SizedBox(
-              height: MediaQuery.of(context).size.height - 30,
+              // height: MediaQuery.of(context).size.height - 30,
+              height: getProportionateScreenHeight(785),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -119,68 +137,107 @@ class _AuctionDetailPageState extends State<AuctionDetailPage> {
                       ],
                     ),
                   ),
+                  const Spacer(),
                   Text(
                     "  Current Bids",
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
-                  SizedBox(
-                      height: getProportionateScreenHeight(90),
-                      child: ListView(
-                        padding: const EdgeInsets.all(8),
-                        children: <Widget>[
-                          Container(
-                            height: 50,
-                            color: Colors.amber[600],
-                            child: const Center(child: Text('Entry A')),
+                  bidList.isEmpty
+                      ? Center(
+                          child: Text(
+                          "You are the first one to place the bid.",
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ))
+                      : SizedBox(
+                          height: getProportionateScreenHeight(90),
+                          child: RefreshIndicator(
+                            onRefresh: () async {
+                              setState(() {
+                                fetchBiddingList();
+                              });
+                            },
+                            child: ListView.builder(
+                                padding: const EdgeInsets.all(8),
+                                itemCount: bidList.length,
+                                itemBuilder: (context, index) => currentBidList(
+                                    context,
+                                    bidList[index]["Email"],
+                                    bidList[index]["Name"],
+                                    bidList[index]["Amount"].toInt())),
                           ),
-                          Container(
-                            height: 50,
-                            color: Colors.amber[500],
-                            child: const Center(child: Text('Entry B')),
+                        ),
+                  SizedBox(height: getProportionateScreenHeight(20)),
+                  widget.self
+                      ? Center(
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(20),
+                            splashColor: kSecondaryColor,
+                            onTap: () => openFile(
+                                url: widget.urlDocument,
+                                fileName: "${widget.id}.pdf"),
+                            child: button(context, "Document",
+                                Icons.file_download_outlined, false, 300),
                           ),
-                          Container(
-                            height: 50,
-                            color: Colors.amber[100],
-                            child: const Center(child: Text('Entry C')),
-                          ),
-                        ],
-                      )),
-                  const Spacer(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      InkWell(
-                        borderRadius: BorderRadius.circular(20),
-                        splashColor: kSecondaryColor,
-                        onTap: () => openFile(
-                            url: widget.urlDocument,
-                            fileName: "${widget.id}.pdf"),
-                        child: button(context, "Document",
-                            Icons.file_download_outlined, false),
-                      ),
-                      InkWell(
-                          borderRadius: BorderRadius.circular(20),
-                          splashColor: kPrimaryLightColor,
-                          onTap: () async {
-                            final value = await popUpDialog(context);
+                        )
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            InkWell(
+                              borderRadius: BorderRadius.circular(20),
+                              splashColor: kSecondaryColor,
+                              onTap: () => openFile(
+                                  url: widget.urlDocument,
+                                  fileName: "${widget.id}.pdf"),
+                              child: button(context, "Document",
+                                  Icons.file_download_outlined, false, 175),
+                            ),
+                            InkWell(
+                                borderRadius: BorderRadius.circular(20),
+                                splashColor: kPrimaryLightColor,
+                                onTap: () async {
+                                  final value = await popUpDialog(context);
 
-                            if (value == null || value.isEmpty) return;
-                            try {
-                              amount = double.parse(value);
+                                  if (value == null || value.isEmpty) {
+                                    showBanner("Enter the amount");
+                                    return;
+                                  }
+                                  try {
+                                    amount = double.parse(value);
 
-                              if (amount < widget.startingPrice) {
-                                showBanner(
-                                    "Enter the amount greater than the starting price");
-                              }
-                            } catch (e) {
-                              showBanner("Please Enter only numbers");
-                            }
-                          },
-                          child: button(
-                              context, 'Place a bid', Icons.gavel, true)),
-                    ],
-                  ),
-                  SizedBox(height: getProportionateScreenHeight(50)),
+                                    if (amount < widget.startingPrice) {
+                                      showBanner(
+                                          "Enter the amount greater than the starting price");
+                                      return;
+                                    }
+                                    if (amount > 100000000) {
+                                      showBanner(
+                                          "The amount entered is too large");
+                                      return;
+                                    }
+                                    FirebaseFirestore.instance
+                                        .collection("Auction")
+                                        .doc(widget.id)
+                                        .collection("Bidding")
+                                        .doc(FirebaseAuth
+                                            .instance.currentUser!.email)
+                                        .set({
+                                      "Name": FirebaseAuth
+                                          .instance.currentUser!.displayName,
+                                      "Email": FirebaseAuth
+                                          .instance.currentUser!.email,
+                                      "Amount": amount,
+                                    }).then((value) => fetchBiddingList());
+                                    // }).then((value) => Navigator.pop(context));
+                                  } catch (e) {
+                                    showBanner("Please Enter only numbers");
+                                    return;
+                                  }
+                                },
+                                child: button(context, 'Place a bid',
+                                    Icons.gavel, true, 175)),
+                          ],
+                        ),
+                  SizedBox(height: getProportionateScreenHeight(45)),
                 ],
               ),
             ),
@@ -188,9 +245,54 @@ class _AuctionDetailPageState extends State<AuctionDetailPage> {
     );
   }
 
+  Widget currentBidList(
+      BuildContext context, String email, String name, int amount) {
+    // print(data);
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      // color: kSecondaryColor,
+      decoration: BoxDecoration(
+          color: kBackgroundColor,
+          borderRadius: BorderRadius.circular(25),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.grey.shade600,
+                offset: const Offset(4, 4),
+                blurRadius: 15,
+                spreadRadius: 1),
+            const BoxShadow(
+                color: Colors.white,
+                offset: Offset(-4, -4),
+                blurRadius: 15,
+                spreadRadius: 1),
+          ]),
+      // height: 50,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Column(
+            children: [
+              Text(
+                name,
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+              Text(
+                email.length > 30 ? "${email.substring(0, 20)}..." : email,
+              ),
+            ],
+          ),
+          Text(
+            "₹ $amount",
+            style: Theme.of(context).textTheme.titleLarge,
+          )
+        ],
+      ),
+    );
+  }
+
   void showBanner(String error) =>
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Container(
+        content: SizedBox(
             height: 50,
             child: Column(
               children: [

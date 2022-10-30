@@ -1,9 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mytenera/components/build_image.dart';
 import 'package:mytenera/components/neumorphism_button.dart';
+import 'package:mytenera/components/no_auction_found.dart';
 import 'package:mytenera/config/size_config.dart';
 import 'package:mytenera/data_service/database_manager.dart';
 import 'package:mytenera/screen/add_auction_page/add_auction.dart';
@@ -27,8 +29,13 @@ class _HomePageState extends State<HomePage> {
 
   fetchDatabaseList() async {
     dynamic result = await DataBaseManager().getAuctionList();
+
     result.removeWhere(
         (item) => item["PostedBy"] == FirebaseAuth.instance.currentUser!.email);
+
+    result.removeWhere((item) => DateFormat("MMM d, yyyy h:mm a")
+        .parse(item["EndDate"] + " " + item["EndTime"])
+        .isBefore(DateTime.now()));
 
     if (result == null) {
     } else {
@@ -47,12 +54,7 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               autionList.isEmpty
-                  ? Column(
-                      children: [
-                        SizedBox(height: getProportionateScreenHeight(200)),
-                        CircularProgressIndicator(),
-                      ],
-                    )
+                  ? notAuctionfound(context)
                   : Column(
                       children: [
                         Row(
@@ -91,7 +93,8 @@ class _HomePageState extends State<HomePage> {
                                   postedBy,
                                   urlImage,
                                   urlDocument,
-                                  startingPrice);
+                                  startingPrice,
+                                  false);
                             },
                             options: CarouselOptions(
                               height: getProportionateScreenHeight(400),
