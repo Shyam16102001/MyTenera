@@ -118,7 +118,6 @@ class ProfilePage extends StatelessWidget {
           'assets/icons/logo.svg',
           height: 30,
         ),
-        // applicationName: "MyTenera",
         applicationVersion: "2.1.0",
         applicationLegalese:
             "An application to make the tender process easy and transparent.");
