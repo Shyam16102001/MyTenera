@@ -119,7 +119,7 @@ class ProfilePage extends StatelessWidget {
           height: 30,
         ),
         // applicationName: "MyTenera",
-        applicationVersion: "2.0.0",
+        applicationVersion: "2.1.0",
         applicationLegalese:
             "An application to make the tender process easy and transparent.");
   }
