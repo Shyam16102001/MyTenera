@@ -1,4 +1,4 @@
-# mytenera
+# MyTenera
 
 An application to make the tender process easy and transparent.
 
